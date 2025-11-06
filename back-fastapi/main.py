@@ -3,7 +3,21 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel
 from typing import Optional
-from count_table import Base, CountTable
+try:
+    from count_table import Base, CountTable
+except Exception:
+    from sqlalchemy.ext.declarative import declarative_base
+    from sqlalchemy import Column, Integer, String, DateTime, func
+
+    Base = declarative_base()
+
+    class CountTable(Base):
+        __tablename__ = "counts"
+        id = Column(Integer, primary_key=True, index=True)
+        count_number = Column(Integer, default=0)
+        description = Column(String, nullable=True)
+        created_at = Column(DateTime(timezone=True), server_default=func.now())
+        updated_at = Column(DateTime(timezone=True), onupdate=func.now(), nullable=True)
 
 # Configuration de la base de données SQLite
 DATABASE_URL = "sqlite:///./counter.db"

@@ -5,7 +5,7 @@ import './App.css'
 import useCountApi from './hooks/useCountApi'
 
 function App() {
-  const [localCount, setLocalCount] = useState(0)
+  const [localCount, setLocalCount] = useState<number>(0)
   
   // API URL: configurable via Vite env VITE_API_URL, sinon utilise le backend local
   // Exemple pour dev: VITE_API_URL="http://localhost:8000/api/count"
@@ -73,7 +73,7 @@ function App() {
         
         <div>
           <h3>Count local (pour comparaison)</h3>
-          <button onClick={() => setLocalCount((prev) => prev + 1)}>
+          <button onClick={() => setLocalCount((prev: number) => prev + 1)}>
             Count local est {localCount}
           </button>
         </div>
