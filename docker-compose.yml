@@ -1,0 +1,62 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: project_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+      - bridge
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-project_db}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  back-fastapi:
+    build:
+      context: ./back-fastapi
+      dockerfile: Dockerfile
+    volumes:
+      - ./back-fastapi:/app:delegated
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/project_db"
+      # Add other env vars or use an .env file in this directory if needed
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+      - bridge
+    restart: unless-stopped
+
+  vite:
+    build:
+      context: ./vite-project
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - back-fastapi
+    networks:
+      - app-network
+      - bridge
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
+  bridge:
+    driver: bridge

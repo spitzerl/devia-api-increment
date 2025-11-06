@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+venv/
+.venv/
+env/
+ENV/
+build/
+dist/
+pip-wheel-metadata/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+dist/
+
+# Vite / React
+/dist/
+/.env.local
+/.env.*.local
+
+# Docker
+*.log
+docker-compose.override.yml
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-workspace
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Others
+*.sqlite3
+*.db
+*.sqlite
